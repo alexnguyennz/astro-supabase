@@ -1,0 +1,29 @@
+{
+  "name": "astro-supabase",
+  "version": "0.0.1",
+  "private": false,
+  "description": "Supabase toolbar for Astro",
+  "keywords": [
+    "astro",
+    "withastro",
+    "astro-integration",
+    "supabase"
+  ],
+  "license": "MIT",
+  "author": "Alex <me@alexnguyen.co.nz>",
+  "bugs": "https://github.com/alexnguyennz/astro-supabase/issues",
+  "homepage": "https://github.com/alexnguyennz/astro-supabase",
+  "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "peerDependencies": {
+    "astro": "^4.0.3"
+  },
+  "dependencies": {
+    "astro": "^4.0.3"
+  }
+}
