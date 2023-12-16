@@ -41,6 +41,8 @@ export default {
       if (!(event instanceof CustomEvent)) return;
 
       if (event.detail.state === true) {
+        initCloseButton();
+
         await refreshTableList();
       }
     });
@@ -61,6 +63,7 @@ export default {
       for (const table in tables) {
         const button = document.createElement("button");
         button.setAttribute("type", "button");
+        button.id = table;
         button.textContent = table;
 
         button.addEventListener("click", () =>
@@ -82,8 +85,13 @@ export default {
       if (!tableContainer || !supabase) return;
       tableContainer.replaceChildren();
 
-      const pageName = canvas.querySelector("#page-name");
-      if (pageName) pageName.textContent = tableName;
+      // Set active table styling
+      const tableButtons = canvas.querySelectorAll(`#table-list button`);
+      for (const table of tableButtons) {
+        table.classList.remove("font-bold");
+      }
+      const tableButton = canvas.querySelector(`#${tableName}`);
+      tableButton?.classList.add("font-bold");
 
       const table = document.createElement("table");
       table.classList.add("table");
@@ -109,25 +117,13 @@ export default {
       // Table Body
       const tbody = document.createElement("tbody");
 
-      // if there's no data, insert static message or say RLS maybe secured
       if (data && !data.length) {
-        console.log("no data");
-
-        const tr = document.createElement("tr");
-        const td = document.createElement("td");
-        td.innerHTML = `No data. If there should be data, it is likely due to <a href="https://supabase.com/docs/guides/auth/row-level-security" target="_blank">RLS</a>.`;
-        tr.append(td);
-
-        tbody.append(tr);
+        table.innerHTML = `No data. If there should be data, it is likely due to <a href="https://supabase.com/docs/guides/auth/row-level-security" target="_blank">RLS</a>.`;
       } else {
-        for (const row of data) {
+        for (const row of data!) {
           const tr = document.createElement("tr");
 
-          //console.log(Object.keys(row));
-
           for (const values of Object.values(row)) {
-            // console.log("value", values);
-
             const td = document.createElement("td");
             td.textContent = values;
 
@@ -155,6 +151,22 @@ export default {
       `);
 
       canvas.append(windowElement);
+    }
+
+    function initCloseButton() {
+      const closeButton =
+        canvas.querySelector<HTMLButtonElement>("#close-button");
+      if (!closeButton) return;
+
+      closeButton.addEventListener("click", () => {
+        eventTarget.dispatchEvent(
+          new CustomEvent("toggle-plugin", {
+            detail: {
+              state: false,
+            },
+          }),
+        );
+      });
     }
   },
 } satisfies DevToolbarApp;

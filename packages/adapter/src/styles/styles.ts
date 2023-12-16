@@ -54,9 +54,15 @@ a:hover {
 }
 
 #table-container {
-  max-height: 320px;
+  max-height: 356px;
   height: 100%;
   overflow: auto;
+}
+
+#close-button {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
 }
 </style>
 `;

@@ -5,9 +5,9 @@ import sitemap from "@astrojs/sitemap";
 import supabase from "astro-supabase";
 
 const { SUPABASE_URL, SUPABASE_ANON_KEY } = loadEnv(
-  process.env.NODE_ENV,
-  process.cwd(),
   "",
+  process.cwd(),
+  "SUPABASE",
 );
 
 // https://astro.build/config
