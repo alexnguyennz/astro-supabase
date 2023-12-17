@@ -2,7 +2,7 @@ export const styles = `
 <style>
 :host astro-dev-toolbar-window {
     max-width: 100%;
-    width: 768px;
+    width: 1024px;
     height: 480px;
 }
 
@@ -16,19 +16,9 @@ h1 {
     font-size: 22px;
 }
 
-astro-dev-toolbar-icon {
-    width: 1em;
-    height: 1em;
-    display: block;
-}
-
 hr {
     border: 1px solid rgba(27, 30, 36, 1);
     margin: 1em 0;
-}
-
-#table-list, #table {
-    overflow-y: auto;
 }
 
 h2 {
@@ -45,12 +35,20 @@ a:hover {
     color: #f4ecfd;
 }
 
+#close-button {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+}
+
 #table-list {
-   width: 100px;
+  width: 100px;
 }
 
 #table-list button {
-    display: block;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
 }
 
 #table-container {
@@ -59,10 +57,9 @@ a:hover {
   overflow: auto;
 }
 
-#close-button {
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
+table {
+  border-collapse: separate;
+  border-spacing: 1em 0.5em;
 }
 </style>
 `;

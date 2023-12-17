@@ -8,20 +8,26 @@ import { header } from "./components/header.ts";
 import { tailwind } from "./styles/tailwind.ts";
 import { styles } from "./styles/styles.ts";
 import { main } from "./components/main.ts";
+import { supabaseIcon } from "./components/icons.ts";
 
 let supabase: SupabaseClient | null;
 let SUPABASE_URL: string | null = null;
 let SUPABASE_ANON_KEY: string | null = null;
 
+interface Property {
+  format: string;
+  type: string;
+}
+
 interface Table {
-  properties: { string: any };
+  properties: { [key: string]: Property };
   required: string[];
   type: "object";
 }
 
-let tables: Table[] | {} = {};
+let tables: Table[];
 
-/* Get Supabase config from server (site) */
+/* Get Supabase config from server */
 if (import.meta.hot) {
   import.meta.hot.on("astro-supabase:config", async (data: SupabaseConfig) => {
     const { supabaseUrl, supabaseKey } = data;
@@ -35,7 +41,7 @@ if (import.meta.hot) {
 export default {
   id: "astro-supabase",
   name: "Astro Supabase",
-  icon: "astro:logo",
+  icon: supabaseIcon,
   init(canvas, eventTarget) {
     eventTarget.addEventListener("app-toggled", async (event) => {
       if (!(event instanceof CustomEvent)) return;
@@ -43,7 +49,7 @@ export default {
       if (event.detail.state === true) {
         initCloseButton();
 
-        await refreshTableList();
+        if (!Object.keys(Object(tables)).length) await refreshTableList();
       }
     });
 
@@ -74,11 +80,20 @@ export default {
       }
 
       tableList?.append(fragment);
+
+      const refreshButton = canvas.querySelector("#refresh-button");
+      refreshButton?.addEventListener("click", () => {
+        refreshTableList();
+
+        const tableContainer =
+          canvas.querySelector<HTMLButtonElement>("#table-container");
+        tableContainer?.replaceChildren();
+      });
     }
 
     async function loadTable(
       tableName: string,
-      properties: { [key: string]: string },
+      properties: Table["properties"],
     ) {
       const tableContainer =
         canvas.querySelector<HTMLButtonElement>("#table-container");
@@ -100,7 +115,6 @@ export default {
       const thead = document.createElement("thead");
       const tr = document.createElement("tr");
 
-      // create
       for (const key in properties) {
         const th = document.createElement("th");
         th.textContent = key;
@@ -110,7 +124,6 @@ export default {
 
       thead.append(tr);
       table.append(thead);
-      // End Table Headings
 
       const { data } = await supabase.from(tableName).select();
 
@@ -125,7 +138,7 @@ export default {
 
           for (const values of Object.values(row)) {
             const td = document.createElement("td");
-            td.textContent = values;
+            td.textContent = values as string;
 
             tr.append(td);
           }
