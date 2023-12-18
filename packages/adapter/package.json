@@ -1,6 +1,6 @@
 {
   "name": "astro-supabase",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": false,
   "description": "Supabase toolbar for Astro",
   "keywords": [
@@ -18,12 +18,15 @@
     "access": "public"
   },
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./plugin": "./src/plugin.ts"
   },
   "peerDependencies": {
+    "@supabase/supabase-js": "^2.39.0",
     "astro": "^4.0.3"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.39.0",
     "astro": "^4.0.3"
   }
 }
